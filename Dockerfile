@@ -9,5 +9,5 @@ COPY config /home/${LUSER}/.ssh/config
 COPY push_repos.sh /usr/local/bin/push_repos
 RUN chown --recursive ${LUSER}:${LUSER} /home/${LUSER}/.ssh /home/${LUSER}/working && chmod 0600 /home/${LUSER}/.ssh/id_rsa /home/${LUSER}/.ssh/config && chmod 0555 /usr/local/bin/push_repos
 USER ${LUSER}
-RUN echo "* * * * * /usr/local/bin/push_repos" | crontab - 
+RUN echo "* * * * * /usr/local/bin/push_repos /home/${LUSER}/working/desertedscorpion" | crontab - 
 CMD curl https://api.github.com/orgs/desertedscorpion/repos | grep "git_url" | sed -e "s#^\s*\"git_url\":\s*\"##" -e "s#\",\$##" | while read REPO; do git -C working/desertedscorpion clone ${REPO}; done && /usr/bin/byobu

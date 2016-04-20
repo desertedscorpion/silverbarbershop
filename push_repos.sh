@@ -2,7 +2,7 @@
 
 ls "${@}" | while read REPO
 do
-    git fetch origin master &&
-    git rebase origin/master &&
-    git push origin master
+    git -C "${@}"/"${REPO}" fetch origin master &&
+    git -C "${@}"/"${REPO}" rebase origin/master &&
+    git -C "${@}"/"${REPO}" push origin master
 done
