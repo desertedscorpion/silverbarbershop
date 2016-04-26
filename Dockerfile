@@ -1,7 +1,9 @@
 FROM taf7lwappqystqp4u7wjsqkdc7dquw/heavytombstone
 MAINTAINER “Emory Merryman” emory.merryman+DoTDeCocXJroqaWu@gmail.com>
 USER root
-RUN dnf update --assumeyes && dnf install --assumeyes byobu git emacs* dbus curl cronie && dnf update --assumeyes && dnf clean all
+COPY docker.repo /etc/yum.repos.d/docker.repo
+RUN dnf update --assumeyes && dnf install --assumeyes byobu git emacs* dbus curl cronie docker-engine sudo systemd && dnf update --assumeyes && dnf clean all
+RUN echo "${LUSER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${LUSER} && chmod 0444 /etc/sudoers.d/${LUSER}
 RUN dbus-uuidgen > /var/lib/dbus/machine-id
 RUN mkdir --parents /home/${LUSER}/.ssh /home/${LUSER}/working/desertedscorpion && chmod 0700 .ssh
 COPY id_rsa /home/${LUSER}/.ssh/id_rsa
